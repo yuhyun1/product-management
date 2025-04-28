@@ -1,19 +1,19 @@
 package com.productmanagement.common.response;
 
-import com.productmanagement.common.exception.ErrorCode;
-import com.productmanagement.common.exception.SuccessCode;
-
 public record ApiResponse<T>(
     boolean success,
-    int status,
     T data,
     String message
 ) {
-    public static <T> ApiResponse<T> success(SuccessCode successCode, T data) {
-        return new ApiResponse<>(true, successCode.getHttpStatus().value(), data, successCode.getMessage());
+    public static <T> ApiResponse<T> success(T data, String message) {
+        return new ApiResponse<>(true, data, message);
     }
 
-    public static <T> ApiResponse<T> error(ErrorCode errorCode) {
-        return new ApiResponse<>(false, errorCode.getStatus().value(), null, errorCode.getMessage());
+    public static <T> ApiResponse<T> success(T data) {
+        return new ApiResponse<>(true, data, null);
+    }
+
+    public static <T> ApiResponse<T> error(String message) {
+        return new ApiResponse<>(false, null, message);
     }
 }
