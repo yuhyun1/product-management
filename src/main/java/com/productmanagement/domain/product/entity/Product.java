@@ -26,4 +26,12 @@ public class Product extends BaseTimeEntity {
 
     @Column(nullable = false)
     private int shippingFee;
+
+    public void update(String name, String description, int price, int shippingFee) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.shippingFee = shippingFee;
+    }
+
 }

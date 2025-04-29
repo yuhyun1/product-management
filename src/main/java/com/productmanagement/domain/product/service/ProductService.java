@@ -5,6 +5,7 @@ import com.productmanagement.common.exception.ErrorCode;
 import com.productmanagement.domain.product.dto.ProductCreateRequest;
 import com.productmanagement.domain.product.dto.ProductCreateResponse;
 import com.productmanagement.domain.product.dto.ProductResponse;
+import com.productmanagement.domain.product.dto.ProductUpdateRequest;
 import com.productmanagement.domain.product.entity.Product;
 import com.productmanagement.domain.product.repository.ProductQueryRepository;
 import com.productmanagement.domain.product.repository.ProductRepository;
@@ -45,6 +46,29 @@ public class ProductService {
         return productQueryRepository.findById(productId)
             .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
     }
+
+    @Transactional
+    public ProductResponse updateProduct(Long productId, ProductUpdateRequest request) {
+        Product product = productRepository.findById(productId)
+            .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+
+        product.update(
+            request.name(),
+            request.description(),
+            request.price(),
+            request.shippingFee()
+        );
+
+        return new ProductResponse(
+            product.getId(),
+            product.getName(),
+            product.getDescription(),
+            product.getPrice(),
+            product.getShippingFee(),
+            product.getCreatedAt()
+        );
+    }
+
 
 
 }

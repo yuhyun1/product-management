@@ -4,6 +4,7 @@ import com.productmanagement.common.response.ApiResponse;
 import com.productmanagement.domain.product.dto.ProductCreateRequest;
 import com.productmanagement.domain.product.dto.ProductCreateResponse;
 import com.productmanagement.domain.product.dto.ProductResponse;
+import com.productmanagement.domain.product.dto.ProductUpdateRequest;
 import com.productmanagement.domain.product.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -45,5 +46,16 @@ public class ProductController {
         ProductResponse response = productService.getProduct(productId);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
     }
+
+    @Operation(summary = "상품 수정")
+    @PutMapping("/{productId}")
+    public ResponseEntity<ApiResponse<?>> updateProduct(
+        @PathVariable Long productId,
+        @RequestBody @Valid ProductUpdateRequest request
+    ) {
+        ProductResponse updatedProduct = productService.updateProduct(productId, request);
+        return ResponseEntity.ok(ApiResponse.success(updatedProduct));
+    }
+
 
 }
