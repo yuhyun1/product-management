@@ -2,18 +2,19 @@ package com.productmanagement.domain.product.service;
 
 import com.productmanagement.common.exception.CustomException;
 import com.productmanagement.common.exception.ErrorCode;
-import com.productmanagement.domain.product.dto.ProductCreateRequest;
-import com.productmanagement.domain.product.dto.ProductCreateResponse;
-import com.productmanagement.domain.product.dto.ProductResponse;
-import com.productmanagement.domain.product.dto.ProductUpdateRequest;
+import com.productmanagement.domain.product.dto.*;
 import com.productmanagement.domain.product.entity.Product;
 import com.productmanagement.domain.product.repository.ProductQueryRepository;
 import com.productmanagement.domain.product.repository.ProductRepository;
+import com.productmanagement.domain.productoption.dto.ProductOptionSummaryResponse;
+import com.productmanagement.domain.productoption.repository.ProductOptionQueryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +22,7 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final ProductQueryRepository productQueryRepository;
+    private final ProductOptionQueryRepository productOptionQueryRepository;
 
     @Transactional
     public ProductCreateResponse createProduct(ProductCreateRequest request) {
@@ -43,9 +45,23 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public ProductResponse getProduct(Long productId) {
-        return productQueryRepository.findById(productId)
+    public ProductDetailResponse getProductDetail(Long productId) {
+        Product product = productRepository.findById(productId)
             .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+
+        List<ProductOptionSummaryResponse> productOptions =
+            productOptionQueryRepository.findSummaryByProductId(product.getId());
+
+        return new ProductDetailResponse(
+            product.getId(),
+            product.getName(),
+            product.getDescription(),
+            product.getPrice(),
+            product.getShippingFee(),
+            product.getStock(),
+            product.getCreatedAt(),
+            productOptions
+        );
     }
 
     @Transactional

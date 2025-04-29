@@ -1,10 +1,7 @@
 package com.productmanagement.domain.product.controller;
 
 import com.productmanagement.common.response.ApiResponse;
-import com.productmanagement.domain.product.dto.ProductCreateRequest;
-import com.productmanagement.domain.product.dto.ProductCreateResponse;
-import com.productmanagement.domain.product.dto.ProductResponse;
-import com.productmanagement.domain.product.dto.ProductUpdateRequest;
+import com.productmanagement.domain.product.dto.*;
 import com.productmanagement.domain.product.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -42,8 +39,8 @@ public class ProductController {
 
     @Operation(summary = "상품 단건 조회")
     @GetMapping("/{productId}")
-    public ResponseEntity<ApiResponse<ProductResponse>> getProduct(@PathVariable Long productId) {
-        ProductResponse response = productService.getProduct(productId);
+    public ResponseEntity<ApiResponse<ProductDetailResponse>> getProductDetail(@PathVariable Long productId) {
+        ProductDetailResponse response = productService.getProductDetail(productId);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
     }
 
