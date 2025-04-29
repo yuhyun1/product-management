@@ -10,7 +10,7 @@ import com.productmanagement.domain.productoption.dto.ProductOptionSummaryRespon
 import com.productmanagement.domain.productoption.entity.ProductOption;
 import com.productmanagement.domain.productoption.repository.ProductOptionQueryRepository;
 import com.productmanagement.domain.productoption.repository.ProductOptionRepository;
-import com.productmanagement.domain.productoption.repository.ProductOptionValueQueryRepository;
+import com.productmanagement.domain.productoptionvalue.repository.ProductOptionValueQueryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

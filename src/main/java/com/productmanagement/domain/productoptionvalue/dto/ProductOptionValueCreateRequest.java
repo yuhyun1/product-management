@@ -1,4 +1,4 @@
-package com.productmanagement.domain.productoption.dto;
+package com.productmanagement.domain.productoptionvalue.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

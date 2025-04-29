@@ -1,6 +1,7 @@
-package com.productmanagement.domain.productoption.entity;
+package com.productmanagement.domain.productoptionvalue.entity;
 
 import com.productmanagement.common.entity.BaseTimeEntity;
+import com.productmanagement.domain.productoption.entity.ProductOption;
 import jakarta.persistence.*;
 import lombok.*;
 

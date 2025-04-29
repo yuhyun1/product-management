@@ -1,7 +1,7 @@
-package com.productmanagement.domain.productoption.repository;
+package com.productmanagement.domain.productoptionvalue.repository;
 
-import com.productmanagement.domain.productoption.dto.ProductOptionValueResponse;
-import com.productmanagement.domain.productoption.entity.QProductOptionValue;
+import com.productmanagement.domain.productoptionvalue.dto.ProductOptionValueResponse;
+import com.productmanagement.domain.productoptionvalue.entity.QProductOptionValue;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.transaction.Transactional;

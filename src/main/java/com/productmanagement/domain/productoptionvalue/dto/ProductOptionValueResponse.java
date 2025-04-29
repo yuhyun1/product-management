@@ -1,4 +1,4 @@
-package com.productmanagement.domain.productoption.dto;
+package com.productmanagement.domain.productoptionvalue.dto;
 
 public record ProductOptionValueResponse(
     Long id,

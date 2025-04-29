@@ -1,6 +1,6 @@
-package com.productmanagement.domain.productoption.repository;
+package com.productmanagement.domain.productoptionvalue.repository;
 
-import com.productmanagement.domain.productoption.dto.ProductOptionValueResponse;
+import com.productmanagement.domain.productoptionvalue.dto.ProductOptionValueResponse;
 
 import java.util.List;
 

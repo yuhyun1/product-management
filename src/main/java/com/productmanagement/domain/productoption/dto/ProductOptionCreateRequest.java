@@ -1,6 +1,7 @@
 package com.productmanagement.domain.productoption.dto;
 
 import com.productmanagement.domain.productoption.entity.OptionType;
+import com.productmanagement.domain.productoptionvalue.dto.ProductOptionValueCreateRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
