@@ -35,7 +35,7 @@ public class ProductQueryRepositoryImpl implements ProductQueryRepository {
                     product.createdAt
                 ))
             .from(product)
-            .where(product.isDeleted.isFalse())
+            .where(product.deletedAt.isNull())
             .orderBy(product.createdAt.desc())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
@@ -44,7 +44,7 @@ public class ProductQueryRepositoryImpl implements ProductQueryRepository {
         Long count = queryFactory
             .select(product.count())
             .from(product)
-            .where(product.isDeleted.isFalse())
+            .where(product.deletedAt.isNull())
             .fetchOne();
 
         return new PageImpl<>(content, pageable, count == null ? 0 : count);
@@ -64,7 +64,7 @@ public class ProductQueryRepositoryImpl implements ProductQueryRepository {
             ))
             .from(product)
             .where(
-                product.isDeleted.isFalse(),
+                product.deletedAt.isNull(),
                 product.id.eq(productId)
             )
             .fetchOne();

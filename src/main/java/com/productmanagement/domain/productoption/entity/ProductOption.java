@@ -1,6 +1,7 @@
-package com.productmanagement.domain.product.entity;
+package com.productmanagement.domain.productoption.entity;
 
 import com.productmanagement.common.entity.BaseTimeEntity;
+import com.productmanagement.domain.product.entity.Product;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,23 +12,28 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Product extends BaseTimeEntity {
+public class ProductOption extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
+
     @Column(nullable = false, length = 100)
     private String name;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
-    private String description;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private OptionType type;
+
+    @Column(columnDefinition = "TEXT")
+    private String values;  // 선택 타입일 경우, 선택 가능한 값들 (JSON 형태)
 
     @Column(nullable = false)
-    private int price;
-
-    @Column(nullable = false)
-    private int shippingFee;
+    private int additionalPrice;
 
     @Column
     private LocalDateTime deletedAt;
@@ -35,12 +41,4 @@ public class Product extends BaseTimeEntity {
     public void softDelete() {
         this.deletedAt = LocalDateTime.now();
     }
-
-    public void update(String name, String description, int price, int shippingFee) {
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.shippingFee = shippingFee;
-    }
-
 }

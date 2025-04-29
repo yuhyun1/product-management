@@ -12,7 +12,9 @@ public enum ErrorCode {
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "인증이 필요합니다."),
     ENTITY_NOT_FOUND(HttpStatus.NOT_FOUND, "요청하신 리소스를 찾을 수 없습니다."),
     ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 이메일입니다."),
-    PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 상품입니다.")
+    PRODUCT_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 상품입니다."),
+    PRODUCT_OPTION_LIMIT_EXCEEDED(HttpStatus.BAD_REQUEST, "상품 옵션은 최대 3개까지만 등록할 수 있습니다."),
+    INVALID_OPTION_VALUES(HttpStatus.BAD_REQUEST, "선택형 옵션은 값 목록을 필수로 입력해야 합니다."),
     ;
 
     private final HttpStatus status;
