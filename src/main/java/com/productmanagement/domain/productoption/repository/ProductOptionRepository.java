@@ -4,6 +4,7 @@ import com.productmanagement.domain.product.entity.Product;
 import com.productmanagement.domain.productoption.entity.ProductOption;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ProductOptionRepository extends JpaRepository<ProductOption, Long> {
@@ -12,4 +13,5 @@ public interface ProductOptionRepository extends JpaRepository<ProductOption, Lo
 
     Optional<ProductOption> findByIdAndDeletedAtIsNull(Long optionId);
 
+    List<ProductOption> findAllByProductAndDeletedAtIsNull(Product product);
 }

@@ -7,7 +7,11 @@ import com.productmanagement.domain.product.entity.Product;
 import com.productmanagement.domain.product.repository.ProductQueryRepository;
 import com.productmanagement.domain.product.repository.ProductRepository;
 import com.productmanagement.domain.productoption.dto.ProductOptionSummaryResponse;
+import com.productmanagement.domain.productoption.entity.ProductOption;
+import com.productmanagement.domain.productoption.entity.ProductOptionValue;
 import com.productmanagement.domain.productoption.repository.ProductOptionQueryRepository;
+import com.productmanagement.domain.productoption.repository.ProductOptionRepository;
+import com.productmanagement.domain.productoption.repository.ProductOptionValueRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +27,8 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductQueryRepository productQueryRepository;
     private final ProductOptionQueryRepository productOptionQueryRepository;
+    private final ProductOptionRepository productOptionRepository;
+    private final ProductOptionValueRepository productOptionValueRepository;
 
     @Transactional
     public ProductCreateResponse createProduct(ProductCreateRequest request) {
@@ -46,8 +52,7 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public ProductDetailResponse getProductDetail(Long productId) {
-        Product product = productRepository.findById(productId)
-            .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+        Product product = getProduct(productId);
 
         List<ProductOptionSummaryResponse> productOptions =
             productOptionQueryRepository.findSummaryByProductId(product.getId());
@@ -66,8 +71,7 @@ public class ProductService {
 
     @Transactional
     public ProductResponse updateProduct(Long productId, ProductUpdateRequest request) {
-        Product product = productRepository.findById(productId)
-            .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+        Product product = getProduct(productId);
 
         product.update(
             request.name(),
@@ -90,10 +94,24 @@ public class ProductService {
 
     @Transactional
     public void deleteProduct(Long productId) {
-        Product product = productRepository.findById(productId)
-            .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
-
+        Product product = getProduct(productId);
         product.softDelete();
+
+        List<ProductOption> options = productOptionRepository.findAllByProductAndDeletedAtIsNull(product);
+
+        for (ProductOption option : options) {
+            option.softDelete();
+
+            List<ProductOptionValue> values = productOptionValueRepository.findAllByProductOptionAndDeletedAtIsNull(option);
+            for (ProductOptionValue value : values) {
+                value.softDelete();
+            }
+        }
+    }
+
+    private Product getProduct(Long productId) {
+        return productRepository.findById(productId)
+            .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
     }
 
 }
