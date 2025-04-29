@@ -36,6 +36,14 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<ApiResponse<Page<ProductResponse>>> getProducts(Pageable pageable) {
         Page<ProductResponse> products = productService.getProducts(pageable);
-        return ResponseEntity.ok(ApiResponse.success(products));
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(products));
     }
+
+    @Operation(summary = "상품 단건 조회")
+    @GetMapping("/{productId}")
+    public ResponseEntity<ApiResponse<ProductResponse>> getProduct(@PathVariable Long productId) {
+        ProductResponse response = productService.getProduct(productId);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
+    }
+
 }

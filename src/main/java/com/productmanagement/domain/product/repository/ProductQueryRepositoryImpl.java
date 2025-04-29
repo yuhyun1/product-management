@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -46,4 +47,24 @@ public class ProductQueryRepositoryImpl implements ProductQueryRepository {
 
         return new PageImpl<>(content, pageable, count == null ? 0 : count);
     }
+
+    @Override
+    public Optional<ProductResponse> findById(Long productId) {
+        ProductResponse result = queryFactory
+            .select(Projections.constructor(
+                ProductResponse.class,
+                product.id,
+                product.name,
+                product.description,
+                product.price,
+                product.shippingFee,
+                product.createdAt
+            ))
+            .from(product)
+            .where(product.id.eq(productId))
+            .fetchOne();
+
+        return Optional.ofNullable(result);
+    }
+
 }

@@ -1,5 +1,7 @@
 package com.productmanagement.domain.product.service;
 
+import com.productmanagement.common.exception.CustomException;
+import com.productmanagement.common.exception.ErrorCode;
 import com.productmanagement.domain.product.dto.ProductCreateRequest;
 import com.productmanagement.domain.product.dto.ProductCreateResponse;
 import com.productmanagement.domain.product.dto.ProductResponse;
@@ -37,5 +39,12 @@ public class ProductService {
     public Page<ProductResponse> getProducts(Pageable pageable) {
         return productQueryRepository.findAllProducts(pageable);
     }
+
+    @Transactional(readOnly = true)
+    public ProductResponse getProduct(Long productId) {
+        return productQueryRepository.findById(productId)
+            .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
+    }
+
 
 }
