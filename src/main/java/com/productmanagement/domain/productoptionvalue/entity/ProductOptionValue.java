@@ -38,4 +38,11 @@ public class ProductOptionValue extends BaseTimeEntity {
         this.deletedAt = LocalDateTime.now();
     }
 
+    public void updateOptionValue(String value, Integer additionalPrice, Integer stock) {
+        this.value = value;
+        this.additionalPrice = additionalPrice;
+        this.stock = stock;
+    }
+
+
 }

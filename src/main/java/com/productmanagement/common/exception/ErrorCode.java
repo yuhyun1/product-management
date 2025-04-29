@@ -16,7 +16,9 @@ public enum ErrorCode {
     PRODUCT_OPTION_LIMIT_EXCEEDED(HttpStatus.BAD_REQUEST, "상품 옵션은 최대 3개까지만 등록할 수 있습니다."),
     INVALID_OPTION_VALUES(HttpStatus.BAD_REQUEST, "선택형 옵션은 값 목록을 필수로 입력해야 합니다."),
     OPTION_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 상품 옵션입니다."),
-    PRODUCT_OPTION_MISMATCH(HttpStatus.BAD_REQUEST, "상품과 옵션이 일치하지 않습니다.")
+    PRODUCT_OPTION_MISMATCH(HttpStatus.BAD_REQUEST, "상품과 옵션이 일치하지 않습니다."),
+    OPTION_VALUE_MISMATCH(HttpStatus.BAD_REQUEST, "상품 옵션과 옵션 값이 일치하지 않습니다."),
+    OPTION_VALUE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 옵션 값입니다.")
     ;
 
     private final HttpStatus status;
