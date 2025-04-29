@@ -27,6 +27,13 @@ public class Product extends BaseTimeEntity {
     @Column(nullable = false)
     private int shippingFee;
 
+    @Column(nullable = false)
+    private boolean isDeleted = false;
+
+    public void softDelete() {
+        this.isDeleted = true;
+    }
+
     public void update(String name, String description, int price, int shippingFee) {
         this.name = name;
         this.description = description;

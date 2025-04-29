@@ -49,13 +49,19 @@ public class ProductController {
 
     @Operation(summary = "상품 수정")
     @PutMapping("/{productId}")
-    public ResponseEntity<ApiResponse<?>> updateProduct(
+    public ResponseEntity<ApiResponse<ProductResponse>> updateProduct(
         @PathVariable Long productId,
         @RequestBody @Valid ProductUpdateRequest request
     ) {
         ProductResponse updatedProduct = productService.updateProduct(productId, request);
-        return ResponseEntity.ok(ApiResponse.success(updatedProduct));
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(updatedProduct));
     }
 
+    @Operation(summary = "상품 삭제")
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<ApiResponse<Void>> deleteProduct(@PathVariable Long productId) {
+        productService.deleteProduct(productId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.success(null));
+    }
 
 }
