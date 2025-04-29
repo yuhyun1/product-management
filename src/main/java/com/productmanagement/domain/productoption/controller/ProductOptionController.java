@@ -50,4 +50,14 @@ public class ProductOptionController {
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
     }
 
+    @Operation(summary = "상품 옵션 삭제")
+    @DeleteMapping("/{optionId}")
+    public ResponseEntity<ApiResponse<Void>> deleteProductOption(
+        @PathVariable Long productId,
+        @PathVariable Long optionId
+    ) {
+        productOptionService.deleteProductOption(productId, optionId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.success(null));
+    }
+
 }

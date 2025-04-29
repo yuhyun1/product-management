@@ -97,6 +97,20 @@ public class ProductOptionService {
         );
     }
 
+    @Transactional
+    public void deleteProductOption(Long productId, Long optionId) {
+        ProductOption option = getProductOption(optionId);
+        validateProductMatch(productId, option);
+
+        option.softDelete();
+
+        List<ProductOptionValue> values = productOptionValueRepository.findAllByProductOptionAndDeletedAtIsNull(option);
+        for (ProductOptionValue value : values) {
+            value.softDelete();
+        }
+    }
+
+
     private void validateOptionLimit(Product product) {
         long count = productOptionRepository.countByProductAndDeletedAtIsNull(product);
         if (count >= 3) {
