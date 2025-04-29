@@ -7,6 +7,7 @@ public record ProductResponse(
     String name,
     String description,
     int price,
+    int stock,
     int shippingFee,
     LocalDateTime createdAt
 ) {

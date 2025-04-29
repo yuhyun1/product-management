@@ -28,6 +28,7 @@ public class ProductService {
             .name(request.name())
             .description(request.description())
             .price(request.price())
+            .stock(request.stock())
             .shippingFee(request.shippingFee())
             .build();
 
@@ -56,6 +57,7 @@ public class ProductService {
             request.name(),
             request.description(),
             request.price(),
+            request.stock(),
             request.shippingFee()
         );
 
@@ -64,6 +66,7 @@ public class ProductService {
             product.getName(),
             product.getDescription(),
             product.getPrice(),
+            product.getStock(),
             product.getShippingFee(),
             product.getCreatedAt()
         );

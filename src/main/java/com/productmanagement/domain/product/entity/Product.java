@@ -29,6 +29,9 @@ public class Product extends BaseTimeEntity {
     @Column(nullable = false)
     private int shippingFee;
 
+    @Column(nullable = false)
+    private Integer stock;
+
     @Column
     private LocalDateTime deletedAt;
 
@@ -36,10 +39,11 @@ public class Product extends BaseTimeEntity {
         this.deletedAt = LocalDateTime.now();
     }
 
-    public void update(String name, String description, int price, int shippingFee) {
+    public void update(String name, String description, int price, int stock, int shippingFee) {
         this.name = name;
         this.description = description;
         this.price = price;
+        this.stock = stock;
         this.shippingFee = shippingFee;
     }
 

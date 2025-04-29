@@ -31,6 +31,7 @@ public class ProductQueryRepositoryImpl implements ProductQueryRepository {
                     product.name,
                     product.description,
                     product.price,
+                    product.stock,
                     product.shippingFee,
                     product.createdAt
                 ))
@@ -59,6 +60,7 @@ public class ProductQueryRepositoryImpl implements ProductQueryRepository {
                 product.name,
                 product.description,
                 product.price,
+                product.stock,
                 product.shippingFee,
                 product.createdAt
             ))

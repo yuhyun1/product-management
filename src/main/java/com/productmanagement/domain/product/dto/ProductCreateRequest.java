@@ -15,6 +15,10 @@ public record ProductCreateRequest(
     @Min(value = 0, message = "상품 가격은 0원 이상이어야 합니다.")
     Integer price,
 
+    @NotNull(message = "상품 재고는 필수입니다.")
+    @Min(value = 0, message = "상품 재고는 0개 이상이어야 합니다.")
+    Integer stock,
+
     @NotNull(message = "배송비는 필수입니다.")
     @Min(value = 0, message = "배송비는 0원 이상이어야 합니다.")
     Integer shippingFee
