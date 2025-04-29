@@ -4,10 +4,7 @@ import com.productmanagement.common.exception.CustomException;
 import com.productmanagement.common.exception.ErrorCode;
 import com.productmanagement.domain.product.entity.Product;
 import com.productmanagement.domain.product.repository.ProductRepository;
-import com.productmanagement.domain.productoption.dto.ProductOptionCreateRequest;
-import com.productmanagement.domain.productoption.dto.ProductOptionCreateResponse;
-import com.productmanagement.domain.productoption.dto.ProductOptionDetailResponse;
-import com.productmanagement.domain.productoption.dto.ProductOptionValueResponse;
+import com.productmanagement.domain.productoption.dto.*;
 import com.productmanagement.domain.productoption.entity.OptionType;
 import com.productmanagement.domain.productoption.entity.ProductOption;
 import com.productmanagement.domain.productoption.entity.ProductOptionValue;
@@ -70,9 +67,7 @@ public class ProductOptionService {
 
     @Transactional(readOnly = true)
     public ProductOptionDetailResponse getProductOptionDetail(Long productId, Long optionId) {
-        ProductOption option = productOptionRepository.findByIdAndDeletedAtIsNull(optionId)
-            .orElseThrow(() -> new CustomException(ErrorCode.OPTION_NOT_FOUND));
-
+        ProductOption option = getProductOption(optionId);
         validateProductMatch(productId, option);
 
         List<ProductOptionValueResponse> values = productOptionValueQueryRepository.findAllByOptionId(optionId);
@@ -83,6 +78,22 @@ public class ProductOptionService {
             option.getType(),
             option.getAdditionalPrice(),
             values
+        );
+    }
+
+    @Transactional
+    public ProductOptionUpdateResponse updateProductOption(Long productId, Long optionId, ProductOptionUpdateRequest request) {
+        ProductOption option = getProductOption(optionId);
+        validateProductMatch(productId, option);
+
+        option.updateOption(request.name(), request.type(), request.additionalPrice());
+
+        return new ProductOptionUpdateResponse(
+            option.getId(),
+            option.getName(),
+            option.getType(),
+            option.getAdditionalPrice(),
+            option.getUpdatedAt()
         );
     }
 
@@ -105,5 +116,10 @@ public class ProductOptionService {
         if (!option.getProduct().getId().equals(productId)) {
             throw new CustomException(ErrorCode.PRODUCT_OPTION_MISMATCH);
         }
+    }
+
+    private ProductOption getProductOption(Long optionId) {
+        return productOptionRepository.findByIdAndDeletedAtIsNull(optionId)
+            .orElseThrow(() -> new CustomException(ErrorCode.OPTION_NOT_FOUND));
     }
 }

@@ -38,4 +38,11 @@ public class ProductOption extends BaseTimeEntity {
     public void softDelete() {
         this.deletedAt = LocalDateTime.now();
     }
+
+    public void updateOption(String name, OptionType type, Integer additionalPrice) {
+        this.name = name;
+        this.type = type;
+        this.additionalPrice = additionalPrice;
+    }
+
 }

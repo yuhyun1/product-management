@@ -1,9 +1,7 @@
 package com.productmanagement.domain.productoption.controller;
 
 import com.productmanagement.common.response.ApiResponse;
-import com.productmanagement.domain.productoption.dto.ProductOptionCreateRequest;
-import com.productmanagement.domain.productoption.dto.ProductOptionCreateResponse;
-import com.productmanagement.domain.productoption.dto.ProductOptionDetailResponse;
+import com.productmanagement.domain.productoption.dto.*;
 import com.productmanagement.domain.productoption.service.ProductOptionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -38,6 +36,17 @@ public class ProductOptionController {
         @PathVariable Long optionId
     ) {
         ProductOptionDetailResponse response = productOptionService.getProductOptionDetail(productId, optionId);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
+    }
+
+    @Operation(summary = "상품 옵션 수정")
+    @PatchMapping("/{optionId}")
+    public ResponseEntity<ApiResponse<ProductOptionUpdateResponse>> updateProductOption(
+        @PathVariable Long productId,
+        @PathVariable Long optionId,
+        @RequestBody @Valid ProductOptionUpdateRequest request
+    ) {
+        ProductOptionUpdateResponse response = productOptionService.updateProductOption(productId, optionId, request);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
     }
 
