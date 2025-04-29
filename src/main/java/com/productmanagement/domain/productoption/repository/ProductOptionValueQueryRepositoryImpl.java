@@ -4,9 +4,11 @@ import com.productmanagement.domain.productoption.dto.ProductOptionValueResponse
 import com.productmanagement.domain.productoption.entity.QProductOptionValue;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -34,5 +36,18 @@ public class ProductOptionValueQueryRepositoryImpl implements ProductOptionValue
             )
             .orderBy(optionValue.createdAt.asc())
             .fetch();
+    }
+
+    @Override
+    @Transactional
+    public void bulkSoftDeleteByOptionId(Long optionId) {
+        queryFactory
+            .update(optionValue)
+            .set(optionValue.deletedAt, LocalDateTime.now())
+            .where(
+                optionValue.productOption.id.eq(optionId),
+                optionValue.deletedAt.isNull()
+            )
+            .execute();
     }
 }

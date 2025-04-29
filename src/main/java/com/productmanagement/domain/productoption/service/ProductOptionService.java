@@ -103,11 +103,7 @@ public class ProductOptionService {
         validateProductMatch(productId, option);
 
         option.softDelete();
-
-        List<ProductOptionValue> values = productOptionValueRepository.findAllByProductOptionAndDeletedAtIsNull(option);
-        for (ProductOptionValue value : values) {
-            value.softDelete();
-        }
+        productOptionValueQueryRepository.bulkSoftDeleteByOptionId(optionId);
     }
 
 

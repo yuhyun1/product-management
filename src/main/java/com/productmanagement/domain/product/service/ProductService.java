@@ -8,10 +8,9 @@ import com.productmanagement.domain.product.repository.ProductQueryRepository;
 import com.productmanagement.domain.product.repository.ProductRepository;
 import com.productmanagement.domain.productoption.dto.ProductOptionSummaryResponse;
 import com.productmanagement.domain.productoption.entity.ProductOption;
-import com.productmanagement.domain.productoption.entity.ProductOptionValue;
 import com.productmanagement.domain.productoption.repository.ProductOptionQueryRepository;
 import com.productmanagement.domain.productoption.repository.ProductOptionRepository;
-import com.productmanagement.domain.productoption.repository.ProductOptionValueRepository;
+import com.productmanagement.domain.productoption.repository.ProductOptionValueQueryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +27,7 @@ public class ProductService {
     private final ProductQueryRepository productQueryRepository;
     private final ProductOptionQueryRepository productOptionQueryRepository;
     private final ProductOptionRepository productOptionRepository;
-    private final ProductOptionValueRepository productOptionValueRepository;
+    private final ProductOptionValueQueryRepository productOptionValueQueryRepository;
 
     @Transactional
     public ProductCreateResponse createProduct(ProductCreateRequest request) {
@@ -101,11 +100,7 @@ public class ProductService {
 
         for (ProductOption option : options) {
             option.softDelete();
-
-            List<ProductOptionValue> values = productOptionValueRepository.findAllByProductOptionAndDeletedAtIsNull(option);
-            for (ProductOptionValue value : values) {
-                value.softDelete();
-            }
+            productOptionValueQueryRepository.bulkSoftDeleteByOptionId(option.getId());
         }
     }
 

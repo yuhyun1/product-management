@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface ProductOptionValueQueryRepository {
     List<ProductOptionValueResponse> findAllByOptionId(Long optionId);
+
+    void bulkSoftDeleteByOptionId(Long optionId);
 }
