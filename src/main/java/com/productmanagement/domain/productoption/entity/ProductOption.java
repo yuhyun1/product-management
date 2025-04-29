@@ -29,11 +29,8 @@ public class ProductOption extends BaseTimeEntity {
     @Column(nullable = false)
     private OptionType type;
 
-    @Column(columnDefinition = "TEXT")
-    private String values;  // 선택 타입일 경우, 선택 가능한 값들 (JSON 형태)
-
     @Column(nullable = false)
-    private int additionalPrice;
+    private Integer additionalPrice;
 
     @Column
     private LocalDateTime deletedAt;

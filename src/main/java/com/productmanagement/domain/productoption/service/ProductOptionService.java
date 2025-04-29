@@ -6,12 +6,19 @@ import com.productmanagement.domain.product.entity.Product;
 import com.productmanagement.domain.product.repository.ProductRepository;
 import com.productmanagement.domain.productoption.dto.ProductOptionCreateRequest;
 import com.productmanagement.domain.productoption.dto.ProductOptionCreateResponse;
+import com.productmanagement.domain.productoption.dto.ProductOptionDetailResponse;
+import com.productmanagement.domain.productoption.dto.ProductOptionValueResponse;
 import com.productmanagement.domain.productoption.entity.OptionType;
 import com.productmanagement.domain.productoption.entity.ProductOption;
+import com.productmanagement.domain.productoption.entity.ProductOptionValue;
 import com.productmanagement.domain.productoption.repository.ProductOptionRepository;
+import com.productmanagement.domain.productoption.repository.ProductOptionValueQueryRepository;
+import com.productmanagement.domain.productoption.repository.ProductOptionValueRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +26,8 @@ public class ProductOptionService {
 
     private final ProductRepository productRepository;
     private final ProductOptionRepository productOptionRepository;
+    private final ProductOptionValueRepository productOptionValueRepository;
+    private final ProductOptionValueQueryRepository productOptionValueQueryRepository;
 
     @Transactional
     public ProductOptionCreateResponse createProductOption(Long productId, ProductOptionCreateRequest request) {
@@ -32,11 +41,23 @@ public class ProductOptionService {
             .product(product)
             .name(request.name())
             .type(request.type())
-            .values(request.values() != null ? String.join(",", request.values()) : null)
             .additionalPrice(request.additionalPrice())
             .build();
 
         ProductOption savedOption = productOptionRepository.save(option);
+
+        if (request.values() != null) {
+            List<ProductOptionValue> values = request.values().stream()
+                .map(valueRequest -> ProductOptionValue.builder()
+                    .productOption(savedOption)
+                    .value(valueRequest.value())
+                    .additionalPrice(valueRequest.additionalPrice())
+                    .stock(valueRequest.stock())
+                    .build())
+                .toList();
+
+            productOptionValueRepository.saveAll(values);
+        }
 
         return new ProductOptionCreateResponse(
             savedOption.getId(),
@@ -47,6 +68,23 @@ public class ProductOptionService {
         );
     }
 
+    @Transactional(readOnly = true)
+    public ProductOptionDetailResponse getProductOptionDetail(Long productId, Long optionId) {
+        ProductOption option = productOptionRepository.findByIdAndDeletedAtIsNull(optionId)
+            .orElseThrow(() -> new CustomException(ErrorCode.OPTION_NOT_FOUND));
+
+        validateProductMatch(productId, option);
+
+        List<ProductOptionValueResponse> values = productOptionValueQueryRepository.findAllByOptionId(optionId);
+
+        return new ProductOptionDetailResponse(
+            option.getId(),
+            option.getName(),
+            option.getType(),
+            option.getAdditionalPrice(),
+            values
+        );
+    }
 
     private void validateOptionLimit(Product product) {
         long count = productOptionRepository.countByProductAndDeletedAtIsNull(product);
@@ -60,6 +98,12 @@ public class ProductOptionService {
             if (request.values() == null || request.values().isEmpty()) {
                 throw new CustomException(ErrorCode.INVALID_OPTION_VALUES);
             }
+        }
+    }
+
+    private static void validateProductMatch(Long productId, ProductOption option) {
+        if (!option.getProduct().getId().equals(productId)) {
+            throw new CustomException(ErrorCode.PRODUCT_OPTION_MISMATCH);
         }
     }
 }
