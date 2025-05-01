@@ -12,6 +12,7 @@ import com.productmanagement.domain.productoption.repository.ProductOptionQueryR
 import com.productmanagement.domain.productoption.repository.ProductOptionRepository;
 import com.productmanagement.domain.productoptionvalue.repository.ProductOptionValueQueryRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProductService {
@@ -41,6 +43,7 @@ public class ProductService {
 
         Product savedProduct = productRepository.save(product);
 
+        log.info("[상품 등록 완료] id={}, name={}", savedProduct.getId(), savedProduct.getName());
         return new ProductCreateResponse(savedProduct.getId());
     }
 
@@ -80,6 +83,7 @@ public class ProductService {
             request.shippingFee()
         );
 
+        log.info("[상품 수정 완료] id={}, name={}", product.getId(), product.getName());
         return new ProductResponse(
             product.getId(),
             product.getName(),
@@ -102,6 +106,8 @@ public class ProductService {
             option.softDelete();
             productOptionValueQueryRepository.bulkSoftDeleteByOptionId(option.getId());
         }
+
+        log.warn("[상품 삭제 처리] id={}, name={}", product.getId(), product.getName());
     }
 
     private Product getProduct(Long productId) {

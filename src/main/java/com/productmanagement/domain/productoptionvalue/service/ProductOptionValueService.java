@@ -12,9 +12,11 @@ import com.productmanagement.domain.productoptionvalue.entity.ProductOptionValue
 import com.productmanagement.domain.productoptionvalue.repository.ProductOptionValueRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProductOptionValueService {
@@ -40,6 +42,9 @@ public class ProductOptionValueService {
 
         ProductOptionValue savedValue = productOptionValueRepository.save(value);
 
+        log.info("[상품 옵션 값 등록 완료] valueId={}, value={}, productId={}",
+            savedValue.getId(), savedValue.getValue(), productId);
+
         return new ProductOptionValueResponse(
             savedValue.getId(),
             savedValue.getValue(),
@@ -63,6 +68,9 @@ public class ProductOptionValueService {
 
         value.updateOptionValue(request.value(), request.additionalPrice(), request.stock());
 
+        log.info("[상품 옵션 값 수정 완료] valueId={}, value={}, productId={}",
+            value.getId(), value.getValue(), productId);
+
         return new ProductOptionValueUpdateResponse(
             value.getId(),
             value.getValue(),
@@ -81,6 +89,9 @@ public class ProductOptionValueService {
         validateProductOptionMatch(optionId, value);
 
         value.softDelete();
+
+        log.info("[상품 옵션 삭제 처리] valueId={}, value={}, productId={}",
+            value.getId(), value.getValue(), productId);
     }
 
 

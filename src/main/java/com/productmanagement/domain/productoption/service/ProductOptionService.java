@@ -13,11 +13,13 @@ import com.productmanagement.domain.productoption.repository.ProductOptionReposi
 import com.productmanagement.domain.productoptionvalue.repository.ProductOptionValueQueryRepository;
 import com.productmanagement.domain.productoptionvalue.repository.ProductOptionValueRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProductOptionService {
@@ -57,6 +59,9 @@ public class ProductOptionService {
             productOptionValueRepository.saveAll(values);
         }
 
+        log.info("[상품 옵션 등록 완료] optionId={}, name={}, productId={}",
+            savedOption.getId(), savedOption.getName(), productId);
+
         return new ProductOptionCreateResponse(
             savedOption.getId(),
             savedOption.getName(),
@@ -89,6 +94,9 @@ public class ProductOptionService {
 
         option.updateOption(request.name(), request.type(), request.additionalPrice());
 
+        log.info("[상품 옵션 수정 완료] optionId={}, name={}, productId={}",
+            option.getId(), option.getName(), productId);
+
         return new ProductOptionUpdateResponse(
             option.getId(),
             option.getName(),
@@ -105,6 +113,9 @@ public class ProductOptionService {
 
         option.softDelete();
         productOptionValueQueryRepository.bulkSoftDeleteByOptionId(optionId);
+
+        log.warn("[상품 옵션 삭제 처리] optionId={}, name={}, productId={}",
+            option.getId(), option.getName(), productId);
     }
 
 
