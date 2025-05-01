@@ -1,5 +1,6 @@
 package com.productmanagement.domain.member.security;
 
+import com.productmanagement.common.security.JwtProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

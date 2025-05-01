@@ -1,4 +1,4 @@
-package com.productmanagement.domain.member.security;
+package com.productmanagement.common.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;

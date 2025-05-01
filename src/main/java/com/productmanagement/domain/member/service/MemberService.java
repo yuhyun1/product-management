@@ -8,7 +8,7 @@ import com.productmanagement.domain.member.dto.SignupRequest;
 import com.productmanagement.domain.member.dto.SignupResponse;
 import com.productmanagement.domain.member.entity.Member;
 import com.productmanagement.domain.member.repository.MemberRepository;
-import com.productmanagement.domain.member.security.JwtProvider;
+import com.productmanagement.common.security.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
