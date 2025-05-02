@@ -4,6 +4,8 @@ import com.productmanagement.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Builder
@@ -20,4 +22,11 @@ public class Member extends BaseTimeEntity {
 
     @Column(nullable = false)
     private String password;
+
+    @Column
+    private LocalDateTime deletedAt;
+
+    public void softDelete() {
+        this.deletedAt = LocalDateTime.now();
+    }
 }
