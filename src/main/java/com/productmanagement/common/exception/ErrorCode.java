@@ -22,7 +22,9 @@ public enum ErrorCode {
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."),
     INVALID_OPTION_VALUE(HttpStatus.BAD_REQUEST, "입력형 옵션은 값 목록을 저장할 수 없습니다."),
-    OPTION_VALUE_REQUIRED(HttpStatus.BAD_REQUEST, "선택형 옵션은 값 목록을 필수로 입력해야 합니다.")
+    OPTION_VALUE_REQUIRED(HttpStatus.BAD_REQUEST, "선택형 옵션은 값 목록을 필수로 입력해야 합니다."),
+    INVALID_JSON(HttpStatus.BAD_REQUEST, "잘못된 JSON 형식입니다."),
+    TYPE_MISMATCH(HttpStatus.BAD_REQUEST, "요청 타입이 잘못되었습니다.")
     ;
 
     private final HttpStatus status;
