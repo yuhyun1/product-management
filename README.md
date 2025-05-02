@@ -1,9 +1,10 @@
+# 유현
 
 ## API 문서 및 배포 정보
 
 - **Swagger 문서**: [https://uhyun.shop/swagger-ui/index.html](https://uhyun.shop/swagger-ui/index.html)
 - **실서버 배포 주소**: [https://uhyun.shop](https://uhyun.shop)
-- **JWT 인증 필요**: 로그인 후 발급받은 토큰을 Swagger 우측 상단 Authorize 버튼으로 입력
+- **JWT 인증 필요**: 로그인 후 발급받은 토큰을 Swagger 우측 상단 Authorize 버튼으로 Bearer를 포함하여 입력
 
 ---
 
@@ -23,6 +24,7 @@
 - 옵션값을 별도 테이블로 분리하여 재고/추가금 필드 관리
 - 조회 API는 실제 사용처 기준으로 응답 DTO를 구성함. → 필요한 정보만 반환하도록 설계하여 불필요한 연관 데이터 로딩 방지
 - Cloud 서버 배포에 있어 도메인, HTTPS 적용, GitHub Actions 자동 배포 포함
+- 핵심 서비스 로직에 대해 성공/예외 흐름을 모두 검증하는 유닛 테스트 작성
 - 모든 수정/삭제 API에 대해 인증된 사용자와 리소스 생성자의 일치 여부를 검증하여 타 사용자의 데이터에 접근하거나 조작할 수 없도록 처리함
   → 상품, 옵션, 옵션값 모두 등록한 회원만 수정/삭제 가능하도록 보안 강화
 - 상품 삭제 및 옵션 삭제 시, 연관된 옵션/옵션값 데이터에 대해
