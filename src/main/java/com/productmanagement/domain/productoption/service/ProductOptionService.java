@@ -12,6 +12,7 @@ import com.productmanagement.domain.productoptionvalue.entity.ProductOptionValue
 import com.productmanagement.domain.productoption.repository.ProductOptionRepository;
 import com.productmanagement.domain.productoptionvalue.repository.ProductOptionValueQueryRepository;
 import com.productmanagement.domain.productoptionvalue.repository.ProductOptionValueRepository;
+import com.productmanagement.domain.productoptionvalue.dto.ProductOptionValueCreateRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -134,9 +135,18 @@ public class ProductOptionService {
     }
 
     private void validateOptionValuesByType(ProductOptionCreateRequest request) {
-        if (request.type() == OptionType.SELECT) {
-            if (request.values() == null || request.values().isEmpty()) {
-                throw new CustomException(ErrorCode.INVALID_OPTION_VALUES);
+        OptionType type = request.type();
+        List<ProductOptionValueCreateRequest> values = request.values();
+
+        if (type == OptionType.INPUT) {
+            if (values != null && !values.isEmpty()) {
+                throw new CustomException(ErrorCode.INVALID_OPTION_VALUE);
+            }
+        }
+
+        if (type == OptionType.SELECT) {
+            if (values == null || values.isEmpty()) {
+                throw new CustomException(ErrorCode.OPTION_VALUE_REQUIRED);
             }
         }
     }
