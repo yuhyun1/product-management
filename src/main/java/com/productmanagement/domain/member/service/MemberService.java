@@ -44,7 +44,7 @@ public class MemberService {
     }
 
     public SignupResponse signup(SignupRequest request) {
-        if (memberRepository.findByEmail(request.email()).isPresent()) {
+        if (memberRepository.existsByEmail(request.email())) {
             throw new CustomException(ErrorCode.ALREADY_EXISTS);
         }
 
