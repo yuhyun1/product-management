@@ -1,6 +1,7 @@
 package com.productmanagement.domain.productoptionvalue.controller;
 
 import com.productmanagement.common.response.ApiResponse;
+import com.productmanagement.common.security.SecurityUtil;
 import com.productmanagement.domain.productoptionvalue.dto.ProductOptionValueCreateRequest;
 import com.productmanagement.domain.productoptionvalue.dto.ProductOptionValueResponse;
 import com.productmanagement.domain.productoptionvalue.dto.ProductOptionValueUpdateRequest;
@@ -29,7 +30,9 @@ public class ProductOptionValueController {
         @PathVariable Long optionId,
         @RequestBody @Valid ProductOptionValueCreateRequest request
     ) {
-        ProductOptionValueResponse response = productOptionValueService.createProductOptionValue(productId, optionId, request);
+        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        ProductOptionValueResponse response =
+            productOptionValueService.createProductOptionValue(productId, optionId, request, currentMemberId);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(response));
     }
 
@@ -41,7 +44,9 @@ public class ProductOptionValueController {
         @PathVariable Long valueId,
         @RequestBody @Valid ProductOptionValueUpdateRequest request
     ) {
-        ProductOptionValueUpdateResponse response = productOptionValueService.updateProductOptionValue(productId, optionId, valueId, request);
+        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        ProductOptionValueUpdateResponse response =
+            productOptionValueService.updateProductOptionValue(productId, optionId, valueId, request, currentMemberId);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
     }
 
@@ -52,7 +57,8 @@ public class ProductOptionValueController {
         @PathVariable Long optionId,
         @PathVariable Long valueId
     ) {
-        productOptionValueService.deleteProductOptionValue(productId, optionId, valueId);
+        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        productOptionValueService.deleteProductOptionValue(productId, optionId, valueId, currentMemberId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.success(null));
     }
 

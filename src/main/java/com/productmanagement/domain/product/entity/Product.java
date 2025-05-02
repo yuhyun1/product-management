@@ -1,6 +1,7 @@
 package com.productmanagement.domain.product.entity;
 
 import com.productmanagement.common.entity.BaseTimeEntity;
+import com.productmanagement.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -31,6 +32,10 @@ public class Product extends BaseTimeEntity {
 
     @Column(nullable = false)
     private Integer stock;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 
     @Column
     private LocalDateTime deletedAt;

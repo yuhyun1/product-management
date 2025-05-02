@@ -1,6 +1,7 @@
 package com.productmanagement.domain.productoption.controller;
 
 import com.productmanagement.common.response.ApiResponse;
+import com.productmanagement.common.security.SecurityUtil;
 import com.productmanagement.domain.productoption.dto.*;
 import com.productmanagement.domain.productoption.service.ProductOptionService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,7 +26,9 @@ public class ProductOptionController {
         @PathVariable Long productId,
         @RequestBody @Valid ProductOptionCreateRequest request
     ) {
-        ProductOptionCreateResponse response = productOptionService.createProductOption(productId, request);
+        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        ProductOptionCreateResponse response =
+            productOptionService.createProductOption(productId, request, currentMemberId);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(response));
     }
 
@@ -46,7 +49,9 @@ public class ProductOptionController {
         @PathVariable Long optionId,
         @RequestBody @Valid ProductOptionUpdateRequest request
     ) {
-        ProductOptionUpdateResponse response = productOptionService.updateProductOption(productId, optionId, request);
+        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        ProductOptionUpdateResponse response =
+            productOptionService.updateProductOption(productId, optionId, request, currentMemberId);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response));
     }
 
@@ -56,7 +61,8 @@ public class ProductOptionController {
         @PathVariable Long productId,
         @PathVariable Long optionId
     ) {
-        productOptionService.deleteProductOption(productId, optionId);
+        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        productOptionService.deleteProductOption(productId, optionId, currentMemberId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.success(null));
     }
 

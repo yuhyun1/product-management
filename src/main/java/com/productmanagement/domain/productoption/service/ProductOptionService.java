@@ -30,10 +30,15 @@ public class ProductOptionService {
     private final ProductOptionValueQueryRepository productOptionValueQueryRepository;
 
     @Transactional
-    public ProductOptionCreateResponse createProductOption(Long productId, ProductOptionCreateRequest request) {
+    public ProductOptionCreateResponse createProductOption(
+        Long productId,
+        ProductOptionCreateRequest request,
+        Long currentMemberId
+    ) {
         Product product = productRepository.findById(productId)
             .orElseThrow(() -> new CustomException(ErrorCode.PRODUCT_NOT_FOUND));
 
+        validateProductOwner(product, currentMemberId);
         validateOptionLimit(product);
         validateOptionValuesByType(request);
 
@@ -88,8 +93,9 @@ public class ProductOptionService {
     }
 
     @Transactional
-    public ProductOptionUpdateResponse updateProductOption(Long productId, Long optionId, ProductOptionUpdateRequest request) {
+    public ProductOptionUpdateResponse updateProductOption(Long productId, Long optionId, ProductOptionUpdateRequest request, Long currentMemberId) {
         ProductOption option = getProductOption(optionId);
+        validateProductOwner(option.getProduct(), currentMemberId);
         validateProductMatch(productId, option);
 
         option.updateOption(request.name(), request.type(), request.additionalPrice());
@@ -107,8 +113,9 @@ public class ProductOptionService {
     }
 
     @Transactional
-    public void deleteProductOption(Long productId, Long optionId) {
+    public void deleteProductOption(Long productId, Long optionId, Long currentMemberId) {
         ProductOption option = getProductOption(optionId);
+        validateProductOwner(option.getProduct(), currentMemberId);
         validateProductMatch(productId, option);
 
         option.softDelete();
@@ -137,6 +144,12 @@ public class ProductOptionService {
     private static void validateProductMatch(Long productId, ProductOption option) {
         if (!option.getProduct().getId().equals(productId)) {
             throw new CustomException(ErrorCode.PRODUCT_OPTION_MISMATCH);
+        }
+    }
+
+    private void validateProductOwner(Product product, Long currentMemberId) {
+        if (!product.getMember().getId().equals(currentMemberId)) {
+            throw new CustomException(ErrorCode.NO_AUTHORIZATION);
         }
     }
 

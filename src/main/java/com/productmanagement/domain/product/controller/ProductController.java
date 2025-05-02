@@ -1,6 +1,7 @@
 package com.productmanagement.domain.product.controller;
 
 import com.productmanagement.common.response.ApiResponse;
+import com.productmanagement.common.security.SecurityUtil;
 import com.productmanagement.domain.product.dto.*;
 import com.productmanagement.domain.product.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,7 +27,8 @@ public class ProductController {
     public ResponseEntity<ApiResponse<ProductCreateResponse>> createProduct(
         @RequestBody @Valid ProductCreateRequest request
     ) {
-        ProductCreateResponse response = productService.createProduct(request);
+        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        ProductCreateResponse response = productService.createProduct(request, currentMemberId);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(response));
     }
 
@@ -50,14 +52,16 @@ public class ProductController {
         @PathVariable Long productId,
         @RequestBody @Valid ProductUpdateRequest request
     ) {
-        ProductResponse updatedProduct = productService.updateProduct(productId, request);
+        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        ProductResponse updatedProduct = productService.updateProduct(productId, request, currentMemberId);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(updatedProduct));
     }
 
     @Operation(summary = "상품 삭제")
     @DeleteMapping("/{productId}")
     public ResponseEntity<ApiResponse<Void>> deleteProduct(@PathVariable Long productId) {
-        productService.deleteProduct(productId);
+        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        productService.deleteProduct(productId, currentMemberId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.success(null));
     }
 

@@ -18,8 +18,10 @@ public enum ErrorCode {
     OPTION_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 상품 옵션입니다."),
     PRODUCT_OPTION_MISMATCH(HttpStatus.BAD_REQUEST, "상품과 옵션이 일치하지 않습니다."),
     OPTION_VALUE_MISMATCH(HttpStatus.BAD_REQUEST, "상품 옵션과 옵션 값이 일치하지 않습니다."),
-    OPTION_VALUE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 옵션 값입니다.")
-    ;
+    OPTION_VALUE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 옵션 값입니다."),
+    NO_AUTHORIZATION(HttpStatus.FORBIDDEN, "권한이 없습니다."),
+    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
+    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다.");
 
     private final HttpStatus status;
     private final String message;

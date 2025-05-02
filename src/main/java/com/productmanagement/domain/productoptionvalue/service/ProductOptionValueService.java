@@ -2,6 +2,7 @@ package com.productmanagement.domain.productoptionvalue.service;
 
 import com.productmanagement.common.exception.CustomException;
 import com.productmanagement.common.exception.ErrorCode;
+import com.productmanagement.domain.product.entity.Product;
 import com.productmanagement.domain.productoption.entity.ProductOption;
 import com.productmanagement.domain.productoption.repository.ProductOptionRepository;
 import com.productmanagement.domain.productoptionvalue.dto.ProductOptionValueCreateRequest;
@@ -28,9 +29,11 @@ public class ProductOptionValueService {
     public ProductOptionValueResponse createProductOptionValue(
         Long productId,
         Long optionId,
-        ProductOptionValueCreateRequest request
+        ProductOptionValueCreateRequest request,
+        Long currentMemberId
     ) {
         ProductOption option = getProductOption(optionId);
+        validateProductOwner(option.getProduct(), currentMemberId);
         validateProductMatch(productId, option);
 
         ProductOptionValue value = ProductOptionValue.builder()
@@ -58,9 +61,11 @@ public class ProductOptionValueService {
         Long productId,
         Long optionId,
         Long valueId,
-        ProductOptionValueUpdateRequest request
+        ProductOptionValueUpdateRequest request,
+        Long currentMemberId
     ) {
         ProductOption option = getProductOption(optionId);
+        validateProductOwner(option.getProduct(), currentMemberId);
         validateProductMatch(productId, option);
 
         ProductOptionValue value = getProductOptionValue(valueId);
@@ -81,8 +86,9 @@ public class ProductOptionValueService {
     }
 
     @Transactional
-    public void deleteProductOptionValue(Long productId, Long optionId, Long valueId) {
+    public void deleteProductOptionValue(Long productId, Long optionId, Long valueId, Long currentMemberId) {
         ProductOption option = getProductOption(optionId);
+        validateProductOwner(option.getProduct(), currentMemberId);
         validateProductMatch(productId, option);
 
         ProductOptionValue value = getProductOptionValue(valueId);
@@ -103,6 +109,12 @@ public class ProductOptionValueService {
     private ProductOption getProductOption(Long optionId) {
         return productOptionRepository.findByIdAndDeletedAtIsNull(optionId)
             .orElseThrow(() -> new CustomException(ErrorCode.OPTION_NOT_FOUND));
+    }
+
+    private void validateProductOwner(Product product, Long currentMemberId) {
+        if (!product.getMember().getId().equals(currentMemberId)) {
+            throw new CustomException(ErrorCode.NO_AUTHORIZATION);
+        }
     }
 
     private static void validateProductMatch(Long productId, ProductOption option) {
